@@ -36,7 +36,7 @@ export function getPlantUMLGraphFromPrismaDatamodel(datamodel: DMMF.Datamodel) {
     const sourceVertex = graph.getVertexByKey(model.name)
 
     const edges = model.fields
-      .filter((field) => field.kind !== 'scalar')
+      .filter((field) => field.kind !== 'scalar' && typeof field.type === 'string')
       .map((field) => {
         const stack = []
         if (field.isList) {
@@ -49,7 +49,7 @@ export function getPlantUMLGraphFromPrismaDatamodel(datamodel: DMMF.Datamodel) {
         } else {
           stack.push('o')
         }
-        const targetVertex = graph.getVertexByKey(field.type)
+        const targetVertex = graph.getVertexByKey(field.type as string)
         if (isEnum(targetVertex.value)) {
           stack.push('|', '|')
         } else if (isModel(targetVertex.value)) {
@@ -78,7 +78,7 @@ export function getPlantUMLGraphFromPrismaDatamodel(datamodel: DMMF.Datamodel) {
       .map(({ field, cardinality }) => {
         let idFormat = `${sourceVertex.value.name}.${field.name}.${field.relationName}`
         const edgeId = uuidv5(idFormat, RELATIONS_ID_NAMESPACE)
-        const targetVertex = graph.getVertexByKey(field.type)
+        const targetVertex = graph.getVertexByKey(field.type as string)
 
         return new GraphEdge<GraphEntity, Relation>(
           sourceVertex,
