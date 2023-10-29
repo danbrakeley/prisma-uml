@@ -42,6 +42,8 @@ describe('Entity', () => {
           isId: true,
           isGenerated: false,
           dbNames: [],
+          isReadOnly: false,
+          isUpdatedAt: false,
         },
       ],
     }
@@ -75,6 +77,8 @@ describe('Entity', () => {
           isId: true,
           isGenerated: false,
           dbNames: [],
+          isReadOnly: false,
+          isUpdatedAt: false,
         },
       ],
     }
@@ -109,6 +113,8 @@ describe('Entity', () => {
           isId: true,
           isGenerated: false,
           dbNames: [],
+          isReadOnly: false,
+          isUpdatedAt: false,
         },
       ],
     }
