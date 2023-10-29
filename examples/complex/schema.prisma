@@ -1,22 +1,23 @@
 model Module {
-  id                      String     @default(cuid()) @id
-  slug                    String     @default(cuid()) @unique
+  id                      String               @id @default(cuid())
+  slug                    String               @unique @default(cuid())
   title                   String?
   description             String?
-  courses                 Course[]   @relation(references: [id])
-  unlockedInTrainings     Training[] @relation(references: [id])
+  courses                 Course[]             @relation(references: [id])
+  unlockedInTrainings     Training[]           @relation(references: [id])
   lessons                 Lesson[]
   links                   Link[]
-  creator                 User       @relation("createdModules", fields: [creatorId], references: [id])
+  creator                 User                 @relation("createdModules", fields: [creatorId], references: [id])
   creatorId               String
-  sharedWith              User[]     @relation("sharedModules", references: [id])
+  sharedWith              User[]               @relation("sharedModules", references: [id])
   isSharedWithAllTrainers Boolean
   isSharedWithAllUsers    Boolean
   userTrainingSessionId   String?
+  UserTrainingSession     UserTrainingSession? @relation(fields: [userTrainingSessionId], references: [id])
 }
 
 model User {
-  id                    String                @default(cuid()) @id
+  id                    String                @id @default(cuid())
   email                 String                @unique
   createdAt             DateTime              @default(now())
   updatedAt             DateTime              @updatedAt
@@ -35,11 +36,13 @@ model User {
   sharedModules         Module[]              @relation("sharedModules", references: [id])
   sentCourseInvites     CourseInvite[]        @relation("fromUserCourse")
   receivedCourseInvites CourseInvite[]        @relation("toUserCourses")
+  Course                Course[]
+  CourseInvite          CourseInvite[]        @relation("fromUserCourses")
 }
 
 model Course {
-  id                      String         @default(cuid()) @id
-  slug                    String         @default(cuid()) @unique
+  id                      String         @id @default(cuid())
+  slug                    String         @unique @default(cuid())
   modules                 Module[]       @relation(references: [id])
   title                   String
   trainings               Training[]
@@ -51,10 +54,11 @@ model Course {
   modulesIdByOrder        String
   invites                 CourseInvite[] @relation("courseInvite")
   userId                  String?
+  User                    User?          @relation("createdCourses", fields: [userId], references: [id])
 }
 
 model CourseInvite {
-  id         String  @default(cuid()) @id
+  id         String  @id @default(cuid())
   fromUser   User    @relation("fromUserCourses", fields: [fromUserId], references: [id])
   toUser     User    @relation("toUserCourses", fields: [toUserId], references: [id])
   fromUserId String
@@ -62,22 +66,24 @@ model CourseInvite {
   course     Course  @relation("courseInvite", fields: [courseId], references: [id])
   courseId   String
   userId     String?
+  User       User?   @relation("fromUserCourse", fields: [userId], references: [id])
 }
 
 model Lesson {
-  id                    String  @default(cuid()) @id
-  slug                  String  @default(cuid()) @unique
+  id                    String               @id @default(cuid())
+  slug                  String               @unique @default(cuid())
   title                 String
   markdown              String
   embedUrl              String
-  module                Module  @relation(fields: [moduleId], references: [id])
+  module                Module               @relation(fields: [moduleId], references: [id])
   moduleId              String
   order                 Int?
   userTrainingSessionId String?
+  UserTrainingSession   UserTrainingSession? @relation(fields: [userTrainingSessionId], references: [id])
 }
 
 model Link {
-  id       String @default(cuid()) @id
+  id       String @id @default(cuid())
   url      String
   title    String
   module   Module @relation(fields: [moduleId], references: [id])
@@ -85,7 +91,7 @@ model Link {
 }
 
 model UserTrainingSession {
-  id               String   @default(cuid()) @id
+  id               String   @id @default(cuid())
   user             User     @relation("userTrainingSession", fields: [userId], references: [id])
   userId           String
   training         Training @relation("trainingSession", fields: [trainingId], references: [id])
@@ -95,8 +101,8 @@ model UserTrainingSession {
 }
 
 model Training {
-  id              String                @default(cuid()) @id
-  slug            String                @default(cuid()) @unique
+  id              String                @id @default(cuid())
+  slug            String                @unique @default(cuid())
   dateEnd         DateTime?
   dateStart       DateTime?
   name            String?
