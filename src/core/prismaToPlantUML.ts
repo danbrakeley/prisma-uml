@@ -1,5 +1,5 @@
 import { DMMF } from '@prisma/generator-helper'
-import { getDMMF } from '@prisma/sdk'
+import { getDMMF } from '@prisma/internals'
 import { prismaEnumToPlantUMLEnum } from './enum/prismaEnumToPlantUMLEnum'
 import { prismaModelToPlantUMLEntity } from './entity/prismaModelToPlantUMLEntity'
 import { addNewLine, StringBuilderArtifact } from './common'

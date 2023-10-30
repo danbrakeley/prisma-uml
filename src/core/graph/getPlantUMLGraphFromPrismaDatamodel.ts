@@ -1,5 +1,5 @@
 import { DMMF } from '@prisma/generator-helper'
-import { Graph, GraphEdge, GraphVertex, VertexKeyExtractor, EdgeKeyExtractor } from 'typescript-generic-datastructures'
+import { Graph, GraphEdge, GraphVertex, VertexKeyExtractor, EdgeKeyExtractor } from '../../datastructures'
 import { v5 as uuidv5, v1 as uuidv1 } from 'uuid'
 
 export interface Cardinality {

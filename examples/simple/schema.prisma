@@ -19,7 +19,7 @@ model Profile {
   id     String @id @default(cuid())
   email  String
   user   User   @relation(fields: [userId], references: [id])
-  userId String
+  userId String @unique
 }
 
 model Dog {
